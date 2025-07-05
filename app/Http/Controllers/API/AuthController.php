@@ -124,4 +124,54 @@ class AuthController extends Controller
             'message' => 'Logged out successfully'
         ]);
     }
+     public function updateTheme(Request $request)
+    {
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required|integer|exists:users,id',
+                'user_theme' => 'required|integer|in:0,1', // 0 = light, 1 = dark
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            // Find the user
+            $user = User::find($request->user_id);
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            // Update the user's theme
+            $user->user_theme = $request->user_theme;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Theme updated successfully',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'user_theme' => $user->user_theme,
+                    'Profile_Pic' => $user->Profile_Pic,
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
