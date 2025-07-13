@@ -12,4 +12,4 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/update-theme', [AuthController::class, 'updateTheme']);
-
+Route::post('/update-profile', [AuthController::class, 'updateProfile']);
