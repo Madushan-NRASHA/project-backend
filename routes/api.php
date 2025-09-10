@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\JobController;
-
+use App\Http\Controllers\JobFilterController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\MsgController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -31,8 +33,30 @@ Route::delete('/users/{id}', [UserController::class, 'destroy']);
 // Jon api End Points 
 Route::prefix('jobs')->group(function () {
     Route::get('/', [JobController::class, 'index']); // GET /api/jobs
-    Route::post('/', [JobController::class, 'store']); // POST /api/jobs
-    Route::get('/{id}', [JobController::class, 'show']); // GET /api/jobs/{id}
-    Route::put('/{id}', [JobController::class, 'update']); // PUT /api/jobs/{id}
-    Route::delete('/{id}', [JobController::class, 'destroy']); // DELETE /api/jobs/{id}
+    Route::get('/filter', [JobController::class, 'getJobs']); // GET /api/jobs/filter
+    Route::post('/', [JobController::class, 'store']); 
+    Route::get('/{id}', [JobController::class, 'show']); 
+    Route::put('/{id}', [JobController::class, 'update']); 
+    Route::delete('/{id}', [JobController::class, 'destroy']); 
 });
+
+
+Route::get('/jobs/filter', [JobFilterController::class, 'apiIndex']);
+Route::post('/jobs/filter', [JobFilterController::class, 'filter']);
+Route::get('/jobs/categories', [JobFilterController::class, 'getCategories']);
+Route::get('/jobs/category/{category}', [JobFilterController::class, 'getByCategory']);
+Route::get('/jobs/stats', [JobFilterController::class, 'getStats']);
+
+
+Route::prefix('projects')->group(function () {
+    Route::get('/', [ProjectController::class, 'index']);       // GET /api/projects
+    Route::post('/', [ProjectController::class, 'store']);      // POST /api/projects
+    Route::get('{id}', [ProjectController::class, 'show']);     // GET /api/projects/{id}
+    Route::put('{id}', [ProjectController::class, 'update']);   // PUT /api/projects/{id}
+    Route::delete('{id}', [ProjectController::class, 'destroy']); // DELETE /api/projects/{id}
+     Route::get('/user-projects/{userId}', [ProjectController::class, 'getUserProjects']);
+    Route::get('/my-projects', [ProjectController::class, 'getMyProjects']);
+});
+
+
+Route::post('/store-message', [MsgController::class, 'store']);

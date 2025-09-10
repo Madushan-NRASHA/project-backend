@@ -18,17 +18,20 @@ class JobController extends Controller
    public function store(Request $request)
 {
     $request->validate([
-        'job_name' => 'required|string',
-        'user_id' => 'required|exists:users,id',
-        'Description' => 'required|string',
+        'job_name'     => 'required|string',
+        'user_id'      => 'required|exists:users,id',
+        'description'  => 'required|string',
         'job_catogary' => 'required|string',
+        'location'     => 'required|string',
+        'salary_range' => 'nullable|string', // Optional
+        'job_type'     => 'required|string', // Example: Full-time, Part-time, Remote
     ]);
 
     $job = Job::create($request->all());
 
     return response()->json([
         'message' => 'Job created successfully',
-        'data' => $job
+        'data'    => $job
     ], 201);
 }
 

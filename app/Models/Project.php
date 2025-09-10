@@ -10,7 +10,8 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'portfolio_id',
+       
+        'user_id',       // added for relation to User
         'name',
         'description',
         'photo',
@@ -23,5 +24,13 @@ class Project extends Model
     public function portfolio()
     {
         return $this->belongsTo(Portfolio::class);
+    }
+
+    /**
+     * Each project belongs to a user.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
