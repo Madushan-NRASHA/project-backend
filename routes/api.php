@@ -59,4 +59,5 @@ Route::prefix('projects')->group(function () {
 });
 
 
-Route::post('/store-message', [MsgController::class, 'store']);
+Route::post('/messages', [MsgController::class, 'store']);
+Route::get('/messages/{userId}', [MsgController::class, 'getUserMessages']);

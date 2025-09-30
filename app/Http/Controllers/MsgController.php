@@ -12,7 +12,6 @@ class MsgController extends Controller
      */
     public function store(Request $request)
     {
-        // Directly create new message
         $msg = Msg::create([
             'job_id' => $request->job_id,
             'sender_id' => $request->current_user_id,
@@ -29,5 +28,22 @@ class MsgController extends Controller
             'success' => true,
             'data' => $msg
         ], 201);
+    }
+
+    /**
+     * Get all messages related to the logged-in user
+     */
+    public function getUserMessages($userId)
+    {
+        // Sender or Receiver is the logged-in user
+        $messages = Msg::where('sender_id', $userId)
+            ->orWhere('receiver_id', $userId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $messages
+        ]);
     }
 }
